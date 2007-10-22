@@ -1,0 +1,10 @@
+<dl>
+	<dt><a href="nodes"><i18n key="echo.manage.myNodes" /></a></dt>
+	<dd><i18n key="echo.manage.myNodes.desc" /></dd>
+	
+	<dt><a href="categories"><i18n key="echo.common.categories" /></a></dt>
+	<dd><i18n key="echo.manage.categories.desc" /></dd>
+	
+	<dt><a href="blocks"><i18n key="echo.common.blocks" /></a></dt>
+	<dd><i18n key="echo.manage.blocks.desc" /></dd>
+</dl>

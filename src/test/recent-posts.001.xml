@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<block id="recent-posts.001" type="recent-posts">
+	<param name="max-number">5</param>
+</block>

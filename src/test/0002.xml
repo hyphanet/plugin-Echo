@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<node id="0002" type="page">
+	<title>Title</title>
+	<created>2007/6/15</created>
+	<modified>2007/6/24</modified>
+	<categories>
+		<category id="002" />
+	</categories>
+	<content>
+		Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vivamus faucibus arcu vel massa. Maecenas in massa quis
+libero vulputate semper. Fusce egestas sodales ipsum. Cras libero. Phasellus blandit dui at lacus. Nullam metus neque, pharetra
+porta, consectetuer et, ultrices quis, enim. Suspendisse ut lorem. Nullam nisi. Class aptent taciti sociosqu ad litora torquent
+per conubia nostra, per inceptos hymenaeos. Fusce tristique. Cras dignissim magna nec ante. Aenean nonummy, lorem at cursus
+varius, neque risus nonummy sapien, vel mattis tellus tortor quis purus. Pellentesque eu dolor. Cras nunc neque, elementum id,
+lacinia eu, ultrices tincidunt, orci. Fusce eget ipsum vel massa placerat scelerisque. Mauris metus nisi, mollis sit amet, sodales
+sit amet, malesuada quis, nulla. Maecenas laoreet.
+
+Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nunc sagittis, dui vestibulum
+dignissim accumsan, sem risus vulputate pede, rhoncus lobortis odio orci at libero. Phasellus laoreet nisi at eros vestibulum
+ornare. Integer eget nunc non metus scelerisque faucibus. Etiam consectetuer sapien at mauris. Pellentesque risus turpis, auctor
+sed, malesuada et, convallis non, est. Praesent pharetra ipsum non dolor. Mauris non magna at ipsum suscipit feugiat. Aliquam arcu
+mauris, cursus non, sagittis sit amet, ornare ut, odio. Pellentesque habitant morbi tristique senectus et netus et malesuada fames
+ac turpis egestas. Suspendisse pulvinar neque sed tellus semper tincidunt. Sed eu mi. Integer auctor lacinia metus. Nunc nibh leo,
+nonummy ut, tempus sed, volutpat quis, lorem.
+
+Vivamus nec enim at enim molestie blandit. Phasellus aliquam, quam quis dapibus gravida, ipsum tellus blandit ante, id dapibus
+lacus ante vitae turpis. Integer aliquet odio ac orci. Aenean nec est et massa nonummy mollis. Vivamus pretium, augue at pretium
+dapibus, augue erat dignissim pede, tempor venenatis lectus magna quis leo. Morbi venenatis tortor a purus. Quisque ullamcorper
+lorem eu ligula. Aliquam erat volutpat. Aliquam eros. Etiam gravida, libero a cursus eleifend, nisi pede tempus lorem, vel rutrum
+est leo nec sem. Donec pede ipsum, faucibus non, vestibulum in, ornare ultrices, lacus. Cras congue magna. Etiam ac mauris eu quam
+consectetuer congue. Integer euismod porttitor tellus. Cras consequat rutrum ipsum.
+
+Integer sapien. Ut sem. Aenean ut tellus a mi auctor tempus. Etiam vel tellus semper odio pretium mattis. Quisque adipiscing
+pulvinar orci. Nam in ligula volutpat urna elementum tristique. Fusce risus nisl, ultrices et, commodo nec, pharetra a, tortor. Ut
+in elit. Mauris congue ante. Nam dapibus eros et tellus. Nulla vestibulum pede vel lectus. Proin faucibus rutrum leo.
+
+Donec felis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla gravida, metus id
+rhoncus aliquet, libero enim eleifend velit, quis malesuada sapien turpis eu nibh. Aliquam erat volutpat. Duis quam. Proin
+malesuada purus auctor elit. Quisque tristique commodo diam. Phasellus imperdiet dolor non pede. Aenean sit amet enim. Vivamus eu
+nulla. Vivamus venenatis congue velit. Duis vel arcu. Suspendisse metus. Integer vitae urna tempus purus ultricies hendrerit.
+	</content>
+</node>

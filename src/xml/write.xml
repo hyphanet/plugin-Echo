@@ -1,0 +1,7 @@
+<dl>
+	<dt><a href="newPost"><i18n key="echo.common.blogPost" /></a></dt>
+	<dd><i18n key="echo.write.newPost" /></dd>
+	
+	<dt><a href="newPage"><i18n key="echo.common.staticPage" /></a></dt>
+	<dd><i18n key="echo.write.newPage" /></dd>
+</dl>

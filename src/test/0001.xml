@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<node id="0001" type="post">
+	<title>Title of the node #0001</title>
+	<created>2007/4/20</created>
+    	<modified>2007/5/19</modified>
+	<categories>
+		<category id="001" />
+		<category id="003" />
+	</categories>
+	<content><![CDATA[1 Heading level 1
+	~~text in italic~~
+	
+	__bold__
+	]]>
+	</content>
+</node>

@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<project name="Echo" default="dist">
+
+	<property name="src.dir" location="src/" />
+	<property name="images.dir" location="images/" />
+	<property name="lib.dir" location="lib/" />
+	<property name="build.dir" location="build/" />
+	<property name="dist.dir" location="dist/" />
+	<property name="javadoc.dir" location="javadoc" />
+	<property name="freenet-cvs-snapshot.location" location="/home/svn-build/freenet-alpha.jar" />
+
+	<property name="xom.location" value="${lib.dir}/xom-1.2b2.jar" />
+	<available file="${xom.location}" property="xom_available" />
+	<fail unless="xom_available" status="1"
+	message="You need to download xom-1.2b2.jar from http://www.xom.nu/unstable.html and to put it in lib/" />
+
+	<target name="init">
+		<tstamp/>
+		<mkdir dir="${build.dir}"/>
+		<mkdir dir="${build.dir}/xml" />
+		<mkdir dir="${build.dir}/i18n" />
+		<mkdir dir="${dist.dir}"/>
+		<mkdir dir="${javadoc.dir}"/>
+	</target>
+	
+	<target name="compile" depends="init">
+
+		<javac srcdir="${src.dir}" destdir="${build.dir}" debug="true" optimize="true">
+			<classpath>
+				<pathelement location="${freenet-cvs-snapshot.location}"/>
+				<fileset dir="${lib.dir}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+
+		<copy todir="${build.dir}/xml/">
+			<fileset dir="${src.dir}/xml/" />
+		</copy>
+
+		<copy todir="${build.dir}/i18n">
+			<fileset dir="${src.dir}/plugins/echo/i18n/">
+				<include name="*.properties" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.dir}">
+			<fileset dir="${src.dir}/resources/" />
+			<fileset dir="${images.dir}" />
+		</copy>
+	</target>
+
+	<target name="dist" depends="compile" description="generate the distribution" >
+		<jar jarfile="${dist.dir}/Echo.jar" basedir="${build.dir}">
+			<manifest>
+				<attribute name="Plugin-Main-Class" value="plugins.echo.Echo"/>
+			</manifest>
+   
+			<ZipFileSet src="${xom.location}"/>
+		</jar>
+	</target>
+
+	<target name="javadoc" depends="init" >
+		<javadoc sourcepath="${src.dir}" packagenames="plugins.echo.*" destdir="${javadoc.dir}" />
+	</target>
+	
+	<target name="clean" description="clean up">
+		<delete dir="${build.dir}"/>
+		<delete dir="${dist.dir}"/>
+		<delete dir="${javadoc.dir}" />
+	</target>
+</project>

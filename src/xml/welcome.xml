@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ul>
+	<li><a href="write"><i18n key="echo.action.write" /></a></li>
+	<li><a href="manage"><i18n key="echo.action.manage" /></a></li>
+	<li><a href="publish"><i18n key="echo.action.publish" /></a></li>
+</ul>

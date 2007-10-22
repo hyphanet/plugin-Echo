@@ -1,0 +1,7 @@
+<dl>
+	<dt><a href="generate"><i18n key="echo.generate" /></a></dt>
+	<dd><i18n key="echo.generate.desc" /></dd>
+	
+	<dt><a href="insert"><i18n key="echo.insert" /></a></dt>
+	<dd><i18n key="echo.insert.desc" /></dd>
+</dl>
