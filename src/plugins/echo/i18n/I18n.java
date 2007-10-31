@@ -59,7 +59,7 @@ public class I18n {
 		if(props == null)
 			props = new Properties();
 		try {
-			props.load(INSTANCE.getClass().getResourceAsStream("/i18n/" + PREFIX + language + SUFFIX));
+			props.load(INSTANCE.getClass().getResourceAsStream(PREFIX + language + SUFFIX));
 		} catch (IOException ioe) {
 			Logger.error("I18n", "IOException while accessing the " + language +"file" + ioe.getMessage(), ioe);
 			throw new MissingResourceException("Unable to load the translation file for " + language, "i18n", language);
