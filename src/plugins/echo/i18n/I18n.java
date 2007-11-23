@@ -5,14 +5,11 @@ import freenet.support.Logger;
 import java.util.Properties;
 
 import java.util.MissingResourceException;
-import java.io.IOException;
-
-import nu.xom.Nodes;
 import nu.xom.Element;
 import nu.xom.Text;
 import nu.xom.Document;
 
-import java.io.*; // FIXME
+import plugins.echo.Echo;
 
 /**
 * 	This class provides a trivial internationalization framework
@@ -21,7 +18,7 @@ public class I18n {
 	
 	public static final String[] AVAILABLE_LANGUAGES = { "en", "fr" };
 	public static final String DEFAULT_LANGUAGE = "en"; 
-	public static final String PREFIX = "echo.i18n.";
+	public static final String PREFIX = "/i18n/echo.i18n.";
 	public static final String SUFFIX = ".properties";
 	
 	private static String selectedLanguage;
@@ -59,8 +56,10 @@ public class I18n {
 		if(props == null)
 			props = new Properties();
 		try {
-			props.load(INSTANCE.getClass().getResourceAsStream(PREFIX + language + SUFFIX));
-		} catch (IOException ioe) {
+			//props.load(INSTANCE.getClass().getResourceAsStream(PREFIX + language + SUFFIX));
+			props.load(Echo.class.getClassLoader().getResourceAsStream(PREFIX + language + SUFFIX));
+			//props.load(I18n.class.getClassLoader().getResourceAsStream(PREFIX + language + SUFFIX));
+		} catch (Exception ioe) {
 			Logger.error("I18n", "IOException while accessing the " + language +"file" + ioe.getMessage(), ioe);
 			throw new MissingResourceException("Unable to load the translation file for " + language, "i18n", language);
 		}

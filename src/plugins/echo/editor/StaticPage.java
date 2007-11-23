@@ -1,5 +1,6 @@
 package plugins.echo.editor;
 
+import plugins.echo.Echo;
 import plugins.echo.i18n.I18n;
 import freenet.support.api.HTTPRequest;
 
@@ -30,7 +31,7 @@ public class StaticPage extends Page {
 		
 		try {
 			Builder parser = new Builder();
-			Document doc = parser.build(page.getClass().getResourceAsStream("/xml/" + fileName));
+			Document doc = parser.build(Echo.class.getClassLoader().getResourceAsStream("/xml/" + fileName));
 
 			I18n.translateXML(doc);
 			page.appendContent(doc.getRootElement().copy());

@@ -82,9 +82,9 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 
 			parser = new Builder();
 			
-			Document styleSheet = parser.build(getClass().getResourceAsStream("/xml/edit.xsl"));
+			Document styleSheet = parser.build(Echo.class.getClassLoader().getResourceAsStream("/xml/edit.xsl"));
 
-			i18n.translateXML(styleSheet);
+			I18n.translateXML(styleSheet);
 			transform = new XSLTransform(styleSheet);
 
 			projectManager = new ProjectManager(BASE_DIR, respirator.getNode().random);
@@ -176,7 +176,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	public String handleHTTPGet(HTTPRequest request) throws PluginHTTPException {
 
 		if ("/plugins/plugins.echo.Echo".equals(request.getPath()))
-			throw new RedirectPluginHTTPException("", "/plugins/plugins.echo.Echo", "/plugins/plugins.echo.Echo/");
+			throw new RedirectPluginHTTPException("", "/plugins/plugins.echo.Echo/");
 			
 		String fileName = (new File(request.getPath())).getName();
 		
