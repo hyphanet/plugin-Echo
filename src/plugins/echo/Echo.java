@@ -205,14 +205,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 		return "Put";
 	}
 	
-	public String handleHTTPPost(HTTPRequest request) throws PluginHTTPException {
-
-		String passwd = request.getPartAsString("formPassword", 32);				//
-		if((passwd == null) || !passwd.equals(respirator.getNode().clientCore.formPassword))	// FIXME : useless ?
-			return "Wrong Password !!";							//
-		
-		
+	public String handleHTTPPost(HTTPRequest request) throws PluginHTTPException {		
 		return handleHTTPRequest(request);
-
 	}
 }
