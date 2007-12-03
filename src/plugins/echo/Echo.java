@@ -36,11 +36,6 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	public static final int PROJECT_ID_LENGTH = 3;
 	public static final int NODE_ID_LENGTH = 4;
 	
-	private static final int MAX_TITLE_LENGTH = 200;
-	private static final int MAX_BODY_LENGTH = 100000;
-	private static final int MAX_OBJECT_LENGTH = 8;
-	private static final int MAX_CATEGORY_NAME_LENGTH = 100;
-	
 	protected PluginRespirator respirator;
 	private Builder parser;
 	private XSLTransform transform;
@@ -50,12 +45,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	private Project project;
 	private NodesManager nodesManager;
 	private BlockManager blockManager;
-	
-	public Echo()
-	{
-
-	}
-	
+		
 	public void runPlugin(PluginRespirator p) {
 		
 		try {
@@ -155,7 +145,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	}
 	
 	public String handleHTTPPut(HTTPRequest request) throws PluginHTTPException {
-		return "Put";
+		return null;
 	}
 	
 	public String handleHTTPPost(HTTPRequest request) throws PluginHTTPException {	
