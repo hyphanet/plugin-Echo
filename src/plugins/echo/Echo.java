@@ -2,7 +2,6 @@ package plugins.echo;
 
 import plugins.echo.i18n.I18n;
 import plugins.echo.block.BlockManager;
-import plugins.echo.block.Block;
 import plugins.echo.editor.*;
 
 
@@ -15,31 +14,17 @@ import freenet.pluginmanager.PluginHTTPException;
 import freenet.pluginmanager.DownloadPluginHTTPException;
 import freenet.pluginmanager.RedirectPluginHTTPException;
 
-import freenet.keys.FreenetURI;
 import freenet.support.api.HTTPRequest;
-import freenet.support.HTMLNode;
-import freenet.node.fcp.ClientPutDir;
 
 import nu.xom.Builder;
 import nu.xom.Document;
-import nu.xom.Element;
-import nu.xom.Attribute;
-import nu.xom.Serializer;
 import nu.xom.xslt.XSLTransform;
 
-import nu.xom.ParsingException;
-import nu.xom.xslt.XSLException;
 
 import java.util.HashMap;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.MalformedURLException;
-
-// TODO
 //	* Exceptions !
 //	* var Project / projectManager
 
