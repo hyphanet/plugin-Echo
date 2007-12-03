@@ -46,6 +46,7 @@ import java.net.MalformedURLException;
 
 public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced, FredPluginThreadless {
 			
+	public static final String BASE_URL = "/plugins/plugins.echo.Echo/";
 	public static final File BASE_DIR = new File("plugins/Echo/");
 	public static final int PROJECT_ID_LENGTH = 3;
 	public static final int NODE_ID_LENGTH = 4;
@@ -142,7 +143,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	
 	public String handleHTTPGet(HTTPRequest request) throws PluginHTTPException {
 		if ("/plugins/plugins.echo.Echo".equals(request.getPath()))
-			throw new RedirectPluginHTTPException("", "/plugins/plugins.echo.Echo/");
+			throw new RedirectPluginHTTPException("", BASE_URL);
 			
 		String fileName = (new File(request.getPath())).getName();
 		
@@ -165,7 +166,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 			
 		}
 		
-		throw new PluginHTTPException("Unable to handle the request!", "/plugins/plugins.echo.Echo/");
+		throw new PluginHTTPException("Unable to handle the request!", BASE_URL);
 	}
 	
 	public String handleHTTPPut(HTTPRequest request) throws PluginHTTPException {
