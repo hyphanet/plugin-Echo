@@ -140,9 +140,39 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	
 	}
 	
-
-	private String handleHTTPRequest(HTTPRequest request) {
+	public String handleHTTPGet(HTTPRequest request) throws PluginHTTPException {
+		if ("/plugins/plugins.echo.Echo".equals(request.getPath()))
+			throw new RedirectPluginHTTPException("", "/plugins/plugins.echo.Echo/");
+			
+		String fileName = (new File(request.getPath())).getName();
 		
+		if ("edit.css".equals(fileName) || "echo-logo-small-0.1.png".equals(fileName)) {
+			
+			try {
+				InputStream in = getClass().getResourceAsStream("/" + fileName);
+
+				int read;
+				int off = 0;
+				byte[] buffer = new byte[in.available()];
+				while((read = in.read(buffer, off, in.available())) != 0) {
+					off+=read;
+				}
+
+				throw new DownloadPluginHTTPException(buffer, fileName, ("edit.css".equals(fileName)) ? "text/css" : "image/png");
+			} catch (IOException ioe) {
+				return ioe.getMessage();
+			}
+			
+		}
+		
+		throw new PluginHTTPException("Unable to handle the request!", "/plugins/plugins.echo.Echo/");
+	}
+	
+	public String handleHTTPPut(HTTPRequest request) throws PluginHTTPException {
+		return "Put";
+	}
+	
+	public String handleHTTPPost(HTTPRequest request) throws PluginHTTPException {	
 		try {
 			String fileName = (new File(request.getPath())).getName();
 			Page p;
@@ -171,41 +201,5 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 			e.printStackTrace();
 			return e.toString();
 		}
-	}
-	
-	public String handleHTTPGet(HTTPRequest request) throws PluginHTTPException {
-
-		if ("/plugins/plugins.echo.Echo".equals(request.getPath()))
-			throw new RedirectPluginHTTPException("", "/plugins/plugins.echo.Echo/");
-			
-		String fileName = (new File(request.getPath())).getName();
-		
-		if ("edit.css".equals(fileName) || "echo-logo-small-0.1.png".equals(fileName)) {
-			
-			try {
-				InputStream in = getClass().getResourceAsStream("/" + fileName);
-
-				int read;
-				int off = 0;
-				byte[] buffer = new byte[in.available()];
-				while((read = in.read(buffer, off, in.available())) != 0) {
-					off+=read;
-				}
-
-				throw new DownloadPluginHTTPException(buffer, fileName, ("edit.css".equals(fileName)) ? "text/css" : "image/png");
-			} catch (IOException ioe) {
-				return ioe.getMessage();
-			}
-			
-		} else
-			return handleHTTPRequest(request);
-	}
-	
-	public String handleHTTPPut(HTTPRequest request) throws PluginHTTPException {
-		return "Put";
-	}
-	
-	public String handleHTTPPost(HTTPRequest request) throws PluginHTTPException {		
-		return handleHTTPRequest(request);
 	}
 }
