@@ -13,7 +13,7 @@ import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 
 /**
-*	A façade class that provides a easy way to insert a directory on Freenet
+*	A frontend which provides an easy way to insert a directory into Freenet
 */
 public class SimpleDirectoryInserter {
 
