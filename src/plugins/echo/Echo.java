@@ -26,6 +26,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 //	* Exceptions !
+import java.util.MissingResourceException;
 //	* var Project / projectManager
 
 
@@ -37,43 +38,55 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	public static final int NODE_ID_LENGTH = 4;
 	
 	protected PluginRespirator respirator;
-	private Builder parser;
-	private XSLTransform transform;
-	private I18n i18n;
-	private HashMap<String,Page> pages;
-	private ProjectManager projectManager;
-	private Project project;
-	private NodesManager nodesManager;
-	private BlockManager blockManager;
-		
-	public void runPlugin(PluginRespirator p) {
-		
+	private final Builder parser;
+	private final XSLTransform transform;
+	private final HashMap<String,Page> pages;
+	private final ProjectManager projectManager;
+	private final Project project;
+	private final NodesManager nodesManager;
+	private final BlockManager blockManager;
+	private final Page welcomePage;
+	
+	public Echo() throws Exception {
 		try {
-			this.respirator = p;
-			
 			if(!BASE_DIR.exists())
 				BASE_DIR.mkdirs();
-			
-			I18n.setLanguage("en");
 
-			parser = new Builder();
-			
+			try {
+				I18n.setLanguage(I18n.DEFAULT_LANGUAGE);
+			} catch(MissingResourceException e) {
+			}
+
+			this.parser = new Builder();
 			Document styleSheet = parser.build(Echo.class.getClassLoader().getResourceAsStream("/xml/edit.xsl"));
 
 			I18n.translateXML(styleSheet);
-			transform = new XSLTransform(styleSheet);
+			this.transform = new XSLTransform(styleSheet);
 
-			projectManager = new ProjectManager(BASE_DIR, respirator.getNode().random);
+			this.projectManager = new ProjectManager(this);
 			if(projectManager.countProjects() == 0)
 				projectManager.newProject("My Flog");
-			
-			setProject(projectManager.loadProject("001"));
-			String formPsw = respirator.getNode().clientCore.formPassword;
-			
-			
-			pages = new HashMap<String,Page>();
 
-			pages.put("plugins.echo.Echo", StaticPage.createFromContentFile("Welcome", "welcome.xml"));
+			this.project = projectManager.loadProject("001");
+			this.nodesManager = project.getNodesManager();
+			this.blockManager = project.getBlockManager();
+			transform.setParameter("baseDir", project.getProjectDir().getAbsolutePath() + "/");
+
+			this.welcomePage = StaticPage.createFromContentFile("Welcome", "welcome.xml");
+			this.pages = new HashMap<String, Page>();
+		} catch (Exception e) {
+			System.out.println("Echo made a booo! " +e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+		
+	public void runPlugin(PluginRespirator p) {
+		try {
+			this.respirator = p;
+			String formPsw = respirator.getNode().clientCore.formPassword;
+
+			pages.put("plugins.echo.Echo", welcomePage);
 			
 			Page nodePage = new NodePage(nodesManager, formPsw);
 			pages.put("newPost", nodePage);
@@ -106,15 +119,6 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	public void terminate() {
 		// TODO
 	}
-
-	private void setProject(Project p) {
-	
-		this.project = p;
-		this.nodesManager = project.getNodesManager();
-		this.blockManager = project.getBlockManager();
-		transform.setParameter("baseDir", project.getProjectDir().getAbsolutePath() + "/");
-	
-	}
 	
 	public String handleHTTPGet(HTTPRequest request) throws PluginHTTPException {
 		if ("/plugins/plugins.echo.Echo".equals(request.getPath()))
@@ -141,7 +145,18 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 			
 		}
 		
-		throw new PluginHTTPException("Unable to handle the request!", BASE_URL);
+		try {
+			welcomePage.handleHTTPRequest(request);
+			return transform.transform(new Document(welcomePage.toXML())).get(0).toXML();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+//		String passwd = request.getParam("formPassword");
+//		if((passwd == null) || !passwd.equals(respirator.getNode().clientCore.formPassword))
+//			throw new AccessDeniedPluginHTTPException("The formPassword hasn't been set!", BASE_URL);
+//		else
+//			return handleHTTPPost(request);
 	}
 	
 	public String handleHTTPPut(HTTPRequest request) throws PluginHTTPException {
