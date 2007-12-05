@@ -77,8 +77,7 @@ public abstract class Page {
 	*/
 	protected void appendError(Throwable t){
 
-		errors.add(t.toString());
-
+		errors.add(t.getMessage());
 	}
 
 	/**

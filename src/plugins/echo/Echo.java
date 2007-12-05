@@ -60,9 +60,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 
 			I18n.translateXML(styleSheet);
 			this.transform = new XSLTransform(styleSheet);
-
-			this.projectManager = new ProjectManager(this);
-
+			this.projectManager = new ProjectManager();
 			this.welcomePage = StaticPage.createFromContentFile("Welcome", "welcome.xml");
 			this.pages = new HashMap<String, Page>();
 		} catch (Exception e) {
@@ -96,7 +94,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 			pages.put("blocks", new BlocksPage(blockManager, formPsw));
 			pages.put("categories", new CategoriesPage(nodesManager, formPsw));
 			pages.put("generate", new GeneratePage(projectManager));
-			pages.put("insert", new InsertPage(projectManager, respirator.getNode().clientCore.getFCPServer(), formPsw));
+			pages.put("insert", new InsertPage(projectManager, respirator.getNode().clientCore.getFCPServer(), formPsw, respirator.getNode().random));
 			
 			pages.put("write", StaticPage.createFromContentFile(I18n.getString("echo.action.write"), "write.xml"));
 			pages.put("manage", StaticPage.createFromContentFile(I18n.getString("echo.action.manage"), "manage.xml"));
@@ -116,7 +114,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	}
 
 	public void terminate() {
-		// TODO
+		project.writeConfig();
 	}
 	
 	public String handleHTTPGet(HTTPRequest request) throws PluginHTTPException {

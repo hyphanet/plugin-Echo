@@ -1,5 +1,6 @@
 package plugins.echo;
 
+import freenet.crypt.RandomSource;
 import plugins.echo.block.BlockManager;
 
 import freenet.keys.FreenetURI;
@@ -20,11 +21,13 @@ import nu.xom.ParsingException;
 */
 public class Project {
 
-	private File projectDir;
-	private File projectConfigFile;
-	private Properties projectConfig;
+	private final File projectDir;
+	private final File projectConfigFile;
+	private final Properties projectConfig;
 	private NodesManager nodesManager;
 	private BlockManager blockManager;
+	private InsertableClientSSK keys = null;
+	private long edition = 1;
 	
 	/**
 	* Class constructor specifying the base dir of the project.
@@ -38,8 +41,29 @@ public class Project {
 		
 		nodesManager = new NodesManager(new File(projectDir.getPath() + File.separator + "nodes"));
 		blockManager = new BlockManager(new File(projectDir.getPath() + File.separator + "blocks"));
-		
 	}
+	
+	public Project(File baseDir, String projectTitle, String id) {
+		this.projectDir = new File(baseDir.getPath() + File.separator + id);
+		this.projectConfigFile = new File(projectDir.getPath() + File.separator + "conf.xml");
+		this.projectConfig = new Properties();
+		
+		projectDir.mkdirs();
+		(new File(projectDir.getPath() + File.separator + "nodes")).mkdirs();
+		(new File(projectDir.getPath() + File.separator + "blocks")).mkdirs();
+
+		projectConfig.setProperty("title", projectTitle);
+		try {
+			writeConfig();
+			this.nodesManager = new NodesManager(new File(projectDir.getPath() + File.separator + "nodes"));
+			this.blockManager = new BlockManager(new File(projectDir.getPath() + File.separator + "blocks"));
+		} catch(ParsingException e) {
+		} catch(FileNotFoundException e) {
+		} catch(IOException e) {
+			System.err.println("ECHO: Error writing the config. file!!" + e.getMessage());
+		}
+	}
+				
 	/**
 	*	Returns the project base dir
 	*	@return the project base dir
@@ -65,8 +89,8 @@ public class Project {
 	*	@return the insert URI of this project
 	*/
 	public FreenetURI getInsertURI() {
-		
-		return getURI("insertURI").getInsertURI();
+		InsertableClientSSK key = getKeys();
+		return (key == null ? null : key.getInsertURI());
 		
 	}
 
@@ -75,33 +99,49 @@ public class Project {
 	*	@return the request URI of this project
 	*/
 	public FreenetURI getRequestURI() {
-		
-		return getURI("insertURI").getURI();
+		InsertableClientSSK key = getKeys();
+		return (key == null ? null : key.getURI().setSuggestedEdition(edition));
 	
 	}
+	
+	public static InsertableClientSSK generateKeys(RandomSource rand, String docName) {
+		return InsertableClientSSK.createRandom(rand, docName);
+	}
 
-	private InsertableClientSSK getURI(String key) {
-		
-		String str = projectConfig.getProperty(key);
-		if(str == null)
-			return null;
-		
-		try {
-			return InsertableClientSSK.create(new FreenetURI(str));
-			
-		} catch (MalformedURLException mue) {
-			return null;
+	private InsertableClientSSK getKeys() {
+		if(keys == null) {
+			String str = projectConfig.getProperty("insertURI");
+			String ed = projectConfig.getProperty("edition");
+			if(str == null || ed == null) {
+				return null;
+			}
+			try {
+				keys = InsertableClientSSK.create(new FreenetURI(str));
+				edition = Long.parseLong(ed);
+			} catch(MalformedURLException mue) {
+				return null;
+			}
 		}
+		return keys;
 	}
 
 	/**
 	*	Registers the URI to insert this project
 	*	@param uri the new insert URI
 	*/
-	public void setInsertURI(InsertableClientSSK uri) {
-	
+	public InsertableClientSSK setInsertURI(InsertableClientSSK uri) {
 		projectConfig.setProperty("insertURI", uri.toString());
+		projectConfig.setProperty("edition", "1");
+		writeConfig();
+		
+		return keys = uri;
+	}
 	
+	public void incrementEditionNumber() {
+		projectConfig.setProperty("insertURI", keys.toString());
+		projectConfig.setProperty("edition", String.valueOf(edition));
+		
+		writeConfig();
 	}
 	
 	/**
@@ -128,12 +168,14 @@ public class Project {
 	/**
 	*	Stores the project config into the file conf.xml
 	*/
-	public void writeConfig() throws FileNotFoundException, IOException {
-	
-		FileOutputStream out = new FileOutputStream(projectConfigFile);
-		projectConfig.storeToXML(out, null);
-		out.close();
-		
+	public void writeConfig(){
+		try {
+			FileOutputStream out = new FileOutputStream(projectConfigFile);
+			projectConfig.storeToXML(out, null);
+			out.close();
+		} catch (FileNotFoundException e){
+		} catch (IOException ioe) {
+		}
 	}
 
 

@@ -38,7 +38,7 @@ public class GeneratePage extends Page {
 			String path = generator.getOutDir().getAbsolutePath();
 			
 			appendContent("See the result : ");
-			appendContent(HTMLHelper.link("file://" + path, path));
+			appendContent(HTMLHelper.link("file://" + path + '/' + InsertPage.DEFAULT_DOCUMENT_NAME, path));
 		}
 	}
 

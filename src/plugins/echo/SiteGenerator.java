@@ -7,6 +7,7 @@ import nu.xom.*;
 import nu.xom.xslt.*;
 
 import java.io.*;
+import plugins.echo.editor.InsertPage;
 
 public class SiteGenerator {
 	
@@ -81,7 +82,7 @@ public class SiteGenerator {
 		for(Node post : posts) {
 			index.appendChild(post.summary().getRoot());
 		}
-		makePage(index, "index.html");
+		makePage(index, InsertPage.DEFAULT_DOCUMENT_NAME);
 		
 // 		writeToFile(rssTransform.transform(new Document(index)), "feed.rss");
 				

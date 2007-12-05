@@ -1,12 +1,9 @@
 package plugins.echo;
 
-import freenet.crypt.RandomSource;
 import freenet.keys.InsertableClientSSK;
 
 import java.util.HashMap;
-import java.util.Properties;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
@@ -18,13 +15,12 @@ import nu.xom.ParsingException;
 public class ProjectManager {
 	private HashMap<String,File> projects;
 	private Project currentProject;
-	private Echo _e;
+	private InsertableClientSSK currentProjectKeys;
 
 	/**
 	*	Class constructor specifying the projects base dir and the random source used to generate the projects keys.
 	*/
-	public ProjectManager(Echo e) {
-		this._e = e;
+	public ProjectManager() {
 		this.projects = new HashMap<String,File>();
 
 		File[] files = Echo.BASE_DIR.listFiles();
@@ -78,32 +74,11 @@ public class ProjectManager {
 			if(! projects.containsKey(id))
 				break;
 		}
-		
-		File projectDir = new File(Echo.BASE_DIR, id);
-		if(projectDir.mkdirs()) {
+		Project project = new Project(Echo.BASE_DIR, projectTitle, id);
+		projects.put(id, project.getProjectDir());
+		project.getBlockManager().createDefaultBlocks();
 			
-			(new File(projectDir.getPath() + File.separator + "nodes")).mkdirs();
-			(new File(projectDir.getPath() + File.separator + "blocks")).mkdirs();
-			
-			FileOutputStream configFile = new FileOutputStream(projectDir.getPath() + File.separator + "conf.xml");
-			Properties conf = new Properties();
-			conf.setProperty("title", projectTitle);
-			
-			InsertableClientSSK key = InsertableClientSSK.createRandom(_e.respirator.getNode().random, projectTitle);
-			conf.setProperty("insertURI", key.toString());
-			
-			conf.storeToXML(configFile, null);
-			configFile.close();
-			
-			projects.put(id, projectDir);
-			Project project = loadProject(id);
-			project.getBlockManager().createDefaultBlocks();
-			
-			return project;
-			
-		} else 
-			throw new IOException("Unable to make the project directory");
-		
+		return project;
 	}
 
 	/**
@@ -135,8 +110,13 @@ public class ProjectManager {
 	*/
 	public String[] getProjectsIds() {
 	
-		return projects.keySet().toArray(new String[]{});
+		return projects.keySet().toArray(new String[0]);
 	
 	
+	}
+	
+	public InsertableClientSSK getProjectKeys() {
+		
+		return currentProjectKeys;
 	}
 }
