@@ -42,9 +42,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	private final XSLTransform transform;
 	private final HashMap<String,Page> pages;
 	private final ProjectManager projectManager;
-	private final Project project;
-	private final NodesManager nodesManager;
-	private final BlockManager blockManager;
+	private Project project;
 	private final Page welcomePage;
 	
 	public Echo() throws Exception {
@@ -64,13 +62,6 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 			this.transform = new XSLTransform(styleSheet);
 
 			this.projectManager = new ProjectManager(this);
-			if(projectManager.countProjects() == 0)
-				projectManager.newProject("My Flog");
-
-			this.project = projectManager.loadProject("001");
-			this.nodesManager = project.getNodesManager();
-			this.blockManager = project.getBlockManager();
-			transform.setParameter("baseDir", project.getProjectDir().getAbsolutePath() + "/");
 
 			this.welcomePage = StaticPage.createFromContentFile("Welcome", "welcome.xml");
 			this.pages = new HashMap<String, Page>();
@@ -84,6 +75,14 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	public void runPlugin(PluginRespirator p) {
 		try {
 			this.respirator = p;
+			if(projectManager.countProjects() == 0)
+				projectManager.newProject("My Flog");
+
+			this.project = projectManager.loadProject("001");
+			NodesManager nodesManager = project.getNodesManager();
+			BlockManager blockManager = project.getBlockManager();
+			transform.setParameter("baseDir", project.getProjectDir().getAbsolutePath() + "/");
+			
 			String formPsw = respirator.getNode().clientCore.formPassword;
 
 			pages.put("plugins.echo.Echo", welcomePage);

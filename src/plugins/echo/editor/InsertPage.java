@@ -41,7 +41,9 @@ public class InsertPage extends Page {
 		USK requestURI = null;
 		try {
 			requestURI = USK.create(project.getRequestURI());
-		} catch (MalformedURLException e) {} // will NPE anyway
+		} catch (MalformedURLException e) {
+			appendError(e);
+		}
 
 		if (request.isPartSet("insert-key")) {					
 			try {
