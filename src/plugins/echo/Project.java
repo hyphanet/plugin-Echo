@@ -4,6 +4,7 @@ import plugins.echo.block.BlockManager;
 
 import freenet.keys.FreenetURI;
 
+import freenet.keys.InsertableClientSSK;
 import java.util.Properties;
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,7 +64,7 @@ public class Project {
 	*	Returns the insert URI of this project
 	*	@return the insert URI of this project
 	*/
-	public FreenetURI getInsertURI() {
+	public InsertableClientSSK getInsertURI() {
 		
 		return getURI("insertURI");
 		
@@ -75,18 +76,18 @@ public class Project {
 	*/
 	public FreenetURI getRequestURI() {
 		
-		return getURI("requestURI");
+		return getURI("insertURI").getURI();
 	
 	}
 
-	private FreenetURI getURI(String key) {
+	private InsertableClientSSK getURI(String key) {
 		
 		String str = projectConfig.getProperty(key);
 		if(str == null)
 			return null;
 		
 		try {
-			return new FreenetURI(str);
+			return InsertableClientSSK.create(new FreenetURI(str));
 			
 		} catch (MalformedURLException mue) {
 			return null;
@@ -97,19 +98,9 @@ public class Project {
 	*	Registers the URI to insert this project
 	*	@param uri the new insert URI
 	*/
-	public void setInsertURI(FreenetURI uri) {
+	public void setInsertURI(InsertableClientSSK uri) {
 	
 		projectConfig.setProperty("insertURI", uri.toString());
-	
-	}
-	
-	/**
-	*	Registers the URI to request the generated files of this project
-	*	@param uri the new request URI
-	*/
-	public void setRequestURI(FreenetURI uri) {
-	
-		projectConfig.setProperty("requestURI", uri.toString());
 	
 	}
 	

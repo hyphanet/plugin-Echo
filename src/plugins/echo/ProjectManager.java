@@ -90,8 +90,7 @@ public class ProjectManager {
 			conf.setProperty("title", projectTitle);
 			
 			InsertableClientSSK key = InsertableClientSSK.createRandom(_e.respirator.getNode().random, projectTitle);
-			conf.setProperty("insertURI", key.getInsertURI().toString());
-			conf.setProperty("requestURI", key.getURI().toString());
+			conf.setProperty("insertURI", key.toString());
 			
 			conf.storeToXML(configFile, null);
 			configFile.close();

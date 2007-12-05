@@ -5,6 +5,7 @@ import plugins.echo.ProjectManager;
 import plugins.echo.SiteGenerator;
 import plugins.echo.SimpleDirectoryInserter;
 import freenet.keys.FreenetURI;
+import freenet.keys.InsertableClientSSK;
 import freenet.support.api.HTTPRequest;
 import freenet.node.fcp.FCPServer;
 
@@ -23,8 +24,7 @@ public class InsertPage extends Page {
 	private Project project;
 	private FCPServer fcpServer;
 	private String formPassword;
-	private	FreenetURI insertURI;
-	private FreenetURI requestURI;
+	private	InsertableClientSSK insertURI;
  
 	public InsertPage(ProjectManager projectManager, FCPServer server, String formPassword){
 	
@@ -43,40 +43,25 @@ public class InsertPage extends Page {
 				
 // 				if(clientPutDir == null || clientPutDir.hasFinished()) {
 					insertURI = null;
-					requestURI = null;
 					
 					try {
-						insertURI = new FreenetURI(request.getPartAsString("insert-key", MAX_KEY_LENGTH));
+						insertURI = InsertableClientSSK.create(new FreenetURI(request.getPartAsString("insert-key", MAX_KEY_LENGTH)));
 					} catch(MalformedURLException mue) {
 						appendError("Invalid insertion key : " + mue.getMessage());
 					}
 					
-					try {
-						requestURI = new FreenetURI(request.getPartAsString("request-key", MAX_KEY_LENGTH));
-					} catch(MalformedURLException mue) {
-						appendError("Invalid request key : " + mue.getMessage());
-					}
-					
-					if(insertURI != null && requestURI != null) {
-					
-						
-						if (! project.getInsertURI().equals(insertURI)){
+					if(insertURI != null) {
+						if (!project.getInsertURI().equals(insertURI)){
 							project.setInsertURI(insertURI);
-							
 						}
 						
-						if (! project.getRequestURI().equals(requestURI)) {
-							project.setRequestURI(requestURI);
-							
-						}
-
 						try {
 
 							SiteGenerator generator = new SiteGenerator(project);
 							generator.generate();
 
 							SimpleDirectoryInserter inserter = new SimpleDirectoryInserter(fcpServer);
-							inserter.insert(new File(project.getProjectDir(), "out"), "index.html", insertURI);
+							inserter.insert(new File(project.getProjectDir(), "out"), "index.html", insertURI.getInsertURI());
 							
 							appendContent(HTMLHelper.link("/queue/", "Go to the queue page."));
 							
@@ -90,7 +75,6 @@ public class InsertPage extends Page {
 // 				}
 		} else {
 			insertURI = project.getInsertURI();
-			requestURI = project.getRequestURI();
 			appendContent(insertForm());
 		}
 	}
@@ -102,14 +86,12 @@ public class InsertPage extends Page {
 		HTMLHelper.label(form, "insert-key", "Insert key");
 		Element insertKeyInput = HTMLHelper.input(form, "text", "insert-key");
 		insertKeyInput.addAttribute(new Attribute("size", String.valueOf(KEY_INPUT_SIZE)));
-		if(insertURI != null)
-			insertKeyInput.addAttribute(new Attribute("value", insertURI.toString()));
+		insertKeyInput.addAttribute(new Attribute("value", insertURI.toString()));
 
 		HTMLHelper.label(form, "request-key", "Request key");
 		Element requestKeyInput = HTMLHelper.input(form, "text", "request-key");
 		requestKeyInput.addAttribute(new Attribute("size", String.valueOf(KEY_INPUT_SIZE)));
-		if(requestURI != null)
-			requestKeyInput.addAttribute(new Attribute("value", requestURI.toString()));
+		requestKeyInput.addAttribute(new Attribute("value", insertURI.getURI().toString()));
 
 		HTMLHelper.input(form, "submit", "submit");
 
