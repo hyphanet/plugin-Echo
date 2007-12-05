@@ -22,7 +22,7 @@ public class BlocksPage extends Page {
 		this.formPsw = formPassword;
 	}
 
-	public void handleHTTPRequest(HTTPRequest request) {
+	public void handleHTTPRequest(HTTPRequest request, boolean isPost) {
 
 		clear();
 

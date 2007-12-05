@@ -145,13 +145,8 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 			
 		}
 		
-		try {
-			welcomePage.handleHTTPRequest(request);
-			return transform.transform(new Document(welcomePage.toXML())).get(0).toXML();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return e.toString();
-		}
+		return handleRequest(request, false);
+		
 //		String passwd = request.getParam("formPassword");
 //		if((passwd == null) || !passwd.equals(respirator.getNode().clientCore.formPassword))
 //			throw new AccessDeniedPluginHTTPException("The formPassword hasn't been set!", BASE_URL);
@@ -164,6 +159,10 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 	}
 	
 	public String handleHTTPPost(HTTPRequest request) throws PluginHTTPException {	
+		return handleRequest(request, true);
+	}
+	
+	private String handleRequest(HTTPRequest request, boolean isPost) {	
 		try {
 			String fileName = (new File(request.getPath())).getName();
 			Page p;
@@ -173,7 +172,7 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 			else
 				p = StaticPage.createFromContentFile("404 error", "http404error.xml");
 			
-			p.handleHTTPRequest(request);
+			p.handleHTTPRequest(request, isPost);
 			
 			/*
 				Nice but input white space are not respected
@@ -187,7 +186,6 @@ public class Echo implements FredPlugin, FredPluginHTTP, FredPluginHTTPAdvanced,
 			*/
 			
 			return transform.transform(new Document(p.toXML())).get(0).toXML();
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return e.toString();

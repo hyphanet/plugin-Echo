@@ -21,7 +21,7 @@ public class NodesPage extends Page {
 
 	}
 
-	public void handleHTTPRequest(HTTPRequest req) {
+	public void handleHTTPRequest(HTTPRequest req, boolean isPost) {
 
 		clear();
 		

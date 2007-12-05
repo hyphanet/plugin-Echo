@@ -19,7 +19,7 @@ public class GeneratePage extends Page {
 		
 	}
 
-	public void handleHTTPRequest(HTTPRequest request) {
+	public void handleHTTPRequest(HTTPRequest request, boolean isPost) {
 
 		clear();
 		project = projectManager.getCurrentProject();

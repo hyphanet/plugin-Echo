@@ -38,7 +38,8 @@ public abstract class Page {
 
 	}
 
-	public abstract void handleHTTPRequest(HTTPRequest request);
+	// REDFLAG: ensure that only safe operations are allowed if !isPost
+	public abstract void handleHTTPRequest(HTTPRequest request, boolean isPost);
 
 	/**
 	*	Appends XML content to this page

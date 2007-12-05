@@ -34,7 +34,7 @@ public class InsertPage extends Page {
 		this.fcpServer = server;
 	}
 
-	public void handleHTTPRequest(HTTPRequest request) {
+	public void handleHTTPRequest(HTTPRequest request, boolean isPost) {
 
 		clear();
 		project = projectManager.getCurrentProject();
