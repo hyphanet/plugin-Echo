@@ -6,6 +6,7 @@ import plugins.echo.SiteGenerator;
 import plugins.echo.SimpleDirectoryInserter;
 import freenet.keys.FreenetURI;
 import freenet.keys.InsertableClientSSK;
+import freenet.keys.USK;
 import freenet.support.api.HTTPRequest;
 import freenet.node.fcp.FCPServer;
 
@@ -50,26 +51,21 @@ public class InsertPage extends Page {
 						appendError("Invalid insertion key : " + mue.getMessage());
 					}
 					
-					if(insertURI != null) {
-						if (!project.getInsertURI().equals(insertURI)){
-							project.setInsertURI(insertURI);
-						}
-						
+					if(insertURI != null) {						
 						try {
-
 							SiteGenerator generator = new SiteGenerator(project);
 							generator.generate();
 
 							SimpleDirectoryInserter inserter = new SimpleDirectoryInserter(fcpServer);
 							inserter.insert(new File(project.getProjectDir(), "out"), "index.html", insertURI.getInsertURI());
 							
-							appendContent(HTMLHelper.link("/queue/", "Go to the queue page."));
+							insertURI = InsertableClientSSK.create(insertURI.getInsertURI().setSuggestedEdition(insertURI.getURI().getSuggestedEdition() + 1));
+							project.setInsertURI(insertURI);
 							
+							appendContent(HTMLHelper.link("/queue/", "Go to the queue page."));
 						} catch (Exception e) {
 							appendError(e);
-						}	
-						
-
+						}
 					} else 
 						appendContent(insertForm());
 // 				}
@@ -91,7 +87,9 @@ public class InsertPage extends Page {
 		HTMLHelper.label(form, "request-key", "Request key");
 		Element requestKeyInput = HTMLHelper.input(form, "text", "request-key");
 		requestKeyInput.addAttribute(new Attribute("size", String.valueOf(KEY_INPUT_SIZE)));
-		requestKeyInput.addAttribute(new Attribute("value", insertURI.getURI().toString()));
+		try {
+			requestKeyInput.addAttribute(new Attribute("value", USK.create(insertURI.getURI()).toString()));
+		} catch (MalformedURLException e) {}
 
 		HTMLHelper.input(form, "submit", "submit");
 
