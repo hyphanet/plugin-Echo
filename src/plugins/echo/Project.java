@@ -64,9 +64,9 @@ public class Project {
 	*	Returns the insert URI of this project
 	*	@return the insert URI of this project
 	*/
-	public InsertableClientSSK getInsertURI() {
+	public FreenetURI getInsertURI() {
 		
-		return getURI("insertURI");
+		return getURI("insertURI").getInsertURI();
 		
 	}
 
